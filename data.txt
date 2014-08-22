@@ -314,3 +314,4 @@ xien = work
 twen = worm
 piung = yes
 pwel = year
+xwol = Able particle
