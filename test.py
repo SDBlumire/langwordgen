@@ -2,16 +2,9 @@ import re
 from random import randint
 
 def chardef(definition, string):
-    existingdata = []
-    error = False
-    store = open('data.txt', 'r')
-    for line in store:
-        word = re.search(r'[A-z]*(?=\s*=)', line).group(0)
-        meaning = re.search(r'(?<==\s)[A-z]*', line).group(0)
-        existingdata.append([word, meaning]) 
-    existingdata.append([string, definition])
+    existingdata = loadfile()
     print("Adding Entry: "+string+" = "+definition)
-    store.close()
+    existingdata.append([string, definition])
     store = open('data.txt', 'w')
     for i in range(len(existingdata)):
         store.write(existingdata[i][0] + " = " + existingdata[i][1] + "\n")
@@ -25,13 +18,7 @@ def genstring():
     return genstr
 
 def testex(string):
-    exdata = []
-    exstore = open('data.txt', 'r')
-    for line in exstore:
-        exword = re.search(r'[A-z]*(?=\s*=)', line).group(0)
-        exmeaning = re.search(r'(?<==\s)[A-z]*', line).group(0)
-        exdata.append([exword, exmeaning])
-    exstore.close()
+    exdata = loadfile()
     for i in range(len(exdata)):
         if exdata[i][0] == string:
             return False
@@ -50,13 +37,7 @@ def getUnusedString():
 
 def orderall():
     sortdata = []
-    exdata = []
-    store = open('data.txt', 'r')
-    for line in store:
-        word = re.search(r'[A-z]*(?=\s*=)', line).group(0)
-        meaning = re.search(r'(?<==\s)[A-z]*', line).group(0)
-        exdata.append([word, meaning])
-    store.close()
+    exdata = loadfile()
     for i in range(len(exdata)):
         sortdata.append(exdata[i][0])
         print("SCANNING "+exdata[i][0])
@@ -73,3 +54,29 @@ def orderall():
         store.write(nexdata[i][0] + " = " + nexdata[i][1] + "\n")
         print("Writing Entry: " + nexdata[i][0] + " = " + nexdata[i][1])
     store.close()
+
+def lookup(wordt):
+    lodata = loadfile()
+    for i in range(len(lodata)):
+        if lodata[i][0] == wordt:
+            print(wordt+" = "+lodata[i][1])
+
+def lookupe(worde):
+    ledata = loadfile()
+    for i in range(len(ledata)):
+        try:
+            if re.search(worde, ledata[i][1]).group(0) == worde:
+                print(ledata[i][1]+" = "+ledata[i][0])
+        except:
+            pass
+            
+
+def loadfile():
+    data = []
+    store = open('data.txt', 'r')
+    for line in store:
+        word = re.search(r'[A-z]*(?=\s*=)', line).group(0)
+        meaning = re.search(r'(?<==\s).*', line).group(0)
+        data.append([word, meaning])
+    store.close()
+    return data
