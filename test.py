@@ -15,7 +15,6 @@ def chardef(definition, string):
     store = open('data.txt', 'w')
     for i in range(len(existingdata)):
         store.write(existingdata[i][0] + " = " + existingdata[i][1] + "\n")
-
     store.close()
     
 def genstring():
@@ -49,3 +48,26 @@ def getUnusedString():
     while testex(a) == False:
         a = genstring()
     return a
+
+def orderall():
+    sortdata = []
+    exdata = []
+    store = open('data.txt', 'r')
+    for line in store:
+        word = re.search(r'[A-z]*(?=\s*=)', line).group(0)
+        meaning = re.search(r'(?<==\s)[A-z]*', line).group(0)
+        exdata.append([word, meaning])
+    store.close()
+    for i in range(len(exdata)):
+        sortdata.append(exdata[i][0])
+        print("SCANNING "+exdata[i][0])
+    sortdata.sort()
+    nexdata = []
+    for i in range(len(sortdata)):
+        for o in range(len(exdata)):
+            if sortdata[i] == exdata[o][0]:
+                nexdata.append([sortdata[i], exdata[o][1]])
+                print("Adding Entry: "+sortdata[i]+" = "+exdata[o][1])
+    store = open('data.txt', 'w')
+    store.write(nexdata[i][0] + " = " + nexdata[i][1] + "\n")
+    store.close()
